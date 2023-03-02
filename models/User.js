@@ -23,12 +23,12 @@ const userSchema = new Schema({
       message: 'Invalid email adress',
     },
   },
-  name: {
+  firstName: {
     type: String,
     required: true,
     minLength: [3, 'Name should be minimum 3 characters long'],
   },
-  surname: {
+  lastName: {
     type: String,
     required: true,
     minLength: [3, 'Surname should be minimum 3 characters long'],
