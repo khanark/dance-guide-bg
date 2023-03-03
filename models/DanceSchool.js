@@ -39,6 +39,10 @@ const danceSchoolSchema = new Schema({
       match: [/^https?:\/\//, 'Invalid facebook link format'],
     },
   },
+  createdAt: {
+    type: String,
+    required: true,
+  },
   location: {
     city: {
       type: String,
@@ -52,6 +56,12 @@ const danceSchoolSchema = new Schema({
     },
   },
   owner: { type: ObjectId, ref: 'User' },
+});
+
+danceSchoolSchema.pre('save', function () {
+  if (!this.createdAt) {
+    this.createdAt = new Date();
+  }
 });
 
 module.exports = model('DanceSchool', danceSchoolSchema);
