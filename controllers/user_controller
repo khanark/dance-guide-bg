@@ -1,0 +1,14 @@
+const router = require('express').Router();
+const { register, login, getSingleUser } = require('../services/user_service.js');
+const userValidationUtility = require('../middlewares/user_validator');
+const userHandler = require('../middlewares/user_handler');
+
+// [x]
+router.post('/register', userHandler(register));
+// [x]
+router.post('/login', userHandler(login));
+// []
+router.get('/:id', userValidationUtility(), userHandler(getSingleUser));
+router.get('/logout', async (req, res) => {});
+
+module.exports = router;
