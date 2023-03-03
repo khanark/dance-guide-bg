@@ -10,8 +10,17 @@ const validator = require('validator');
 const userSchema = new Schema({
   avatar: {
     type: String,
-    required: true,
     match: [/^https?:\/\//, 'Invalid avatar format'],
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (value) {
+        return /^(?:\+359|0)(?:87|88|89)(?:\d{7}|\d{3}\s\d{2}\s\d{2}|\d{3}-\d{2}-\d{2})$/.test(value);
+      },
+      message: 'Invalid phone format',
+    },
   },
   email: {
     type: String,
@@ -41,6 +50,18 @@ const userSchema = new Schema({
   moreInfo: {
     type: String,
   },
+  danceSchools: [{ type: ObjectId, ref: 'DanceSchool' }],
 });
+
+userSchema.index(
+  { email: 1 },
+  {
+    unique: true,
+    collation: {
+      locale: 'en',
+      strength: 2,
+    },
+  }
+);
 
 module.exports = model('User', userSchema);
