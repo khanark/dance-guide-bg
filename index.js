@@ -2,6 +2,7 @@ const express = require('express');
 const CORS = require('cors');
 const router = require('./config/routes');
 const database = require('./config/database.js');
+const trimmer = require('./middlewares/trimmer');
 
 const app = express();
 const port = 3000;
@@ -9,6 +10,7 @@ const port = 3000;
 const start = async () => {
   app.use(express.json());
   app.use(CORS());
+  app.use(trimmer());
 
   await database();
   router(app);
