@@ -41,27 +41,19 @@ const danceSchoolSchema = new Schema({
   },
   createdAt: {
     type: String,
-    required: true,
+    default: new Date().toISOString(),
   },
-  location: {
-    city: {
-      type: String,
-      required: true,
-      minLength: [4, 'City should be minimum 4 characters long'],
-    },
-    street: {
-      type: String,
-      required: true,
-      minLength: [4, 'Street should be minimum 4 characters long'],
-    },
+  city: {
+    type: String,
+    required: true,
+    minLength: [4, 'City should be minimum 4 characters long'],
+  },
+  street: {
+    type: String,
+    required: true,
+    minLength: [4, 'Street should be minimum 4 characters long'],
   },
   owner: { type: ObjectId, ref: 'User' },
-});
-
-danceSchoolSchema.pre('save', function () {
-  if (!this.createdAt) {
-    this.createdAt = new Date();
-  }
 });
 
 module.exports = model('DanceSchool', danceSchoolSchema);
