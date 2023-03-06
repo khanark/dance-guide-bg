@@ -31,11 +31,11 @@ const login = async ({ email, password }) => {
   const user = await User.findOne({ email }).lean();
   console.log(user);
   if (!Boolean(user)) {
-    throw new Error('Wrong username or password', { cause: 401 });
+    sendError('Wrong username or password', 401);
   }
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
-    throw new Error('Wrong username or password', { cause: 401 });
+    sendError('Wrong username or password', 401);
   }
   const token = await createToken(user);
   return userViewModel(user, token);
@@ -49,8 +49,7 @@ const createToken = async ({ _id, email, firstName, lastName, phoneNumber }) => 
     lastName,
     phoneNumber,
   };
-  const token = await jwt.sign(payload, SECRET, { expiresIn: '2h' });
-  return token;
+  return jwt.sign(payload, SECRET, { expiresIn: '2h' });
 };
 
 const verifyToken = async headers => {
@@ -63,7 +62,7 @@ const verifyToken = async headers => {
   if (!existingUser) {
     sendError('No authorization', 401);
   }
-  return decoded;
+  return decodedUser;
 };
 
 const getSingleUser = async id => {
@@ -71,9 +70,12 @@ const getSingleUser = async id => {
   return userViewModel(user);
 };
 
-const updateUser = (id, data) => {
-  return User.findByIdAndUpdate(id, data, { runValidators: true });
+const getAllUsers = async () => {
+  const users = await User.find();
+  return users.map(user => userViewModel(user));
 };
+
+const updateUser = (id, data) => User.findByIdAndUpdate(id, data, { runValidators: true });
 
 module.exports = {
   register,
@@ -81,4 +83,5 @@ module.exports = {
   verifyToken,
   getSingleUser,
   updateUser,
+  getAllUsers,
 };
