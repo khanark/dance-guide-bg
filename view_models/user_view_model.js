@@ -1,6 +1,7 @@
 module.exports = (user, token) => {
-  const { email, firstName, lastName, phoneNumber, avatar, moreInfo, danceSchools } = user;
+  const { _id, email, firstName, lastName, phoneNumber, avatar, moreInfo, danceSchools } = user;
   return {
+    id: _id,
     email,
     firstName,
     lastName,
